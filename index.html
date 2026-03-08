@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CA Track Day Schedule 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --surface: #141416;
+    --surface2: #1c1c1f;
+    --border: #2a2a2e;
+    --accent-laguna: #e8b84b;
+    --accent-sonoma: #5ba3f5;
+    --accent-thunderhill: #f07050;
+    --text: #f0ede8;
+    --muted: #6b6b72;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; min-height: 100vh; padding: 32px 24px 64px; }
+  header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 16px; }
+  .title-block h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 6vw, 64px); letter-spacing: 0.02em; line-height: 0.9; color: var(--text); }
+  .title-block h1 span { color: var(--accent-laguna); }
+  .title-block p { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 8px; }
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+  .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-divider { width: 1px; background: var(--border); align-self: stretch; margin: 0 2px; }
+  .filter-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding: 7px 14px; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .filter-btn:hover { color: var(--text); border-color: #444; }
+  .filter-btn.active { color: var(--bg); font-weight: 500; }
+  .filter-btn.active[data-filter="all"] { background: var(--text); border-color: var(--text); }
+  .filter-btn.active[data-track="Laguna Seca"] { background: var(--accent-laguna); border-color: var(--accent-laguna); }
+  .filter-btn.active[data-track="Sonoma Raceway"] { background: var(--accent-sonoma); border-color: var(--accent-sonoma); }
+  .filter-btn.active[data-track="Thunderhill"] { background: var(--accent-thunderhill); border-color: var(--accent-thunderhill); }
+  .filter-btn.active[data-type="Motorcycle"] { background: #a87eff; border-color: #a87eff; }
+  .filter-btn.active[data-type="Car / HPDE"] { background: #4ecda4; border-color: #4ecda4; }
+  .filter-btn.active[data-type="School"] { background: #ff9f55; border-color: #ff9f55; }
+  .filter-btn.active[data-day="Weekday"] { background: #60c0d4; border-color: #60c0d4; }
+  .filter-btn.active[data-day="Weekend"] { background: #f0b060; border-color: #f0b060; }
+  .sort-bar { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+  .sort-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  select { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'DM Mono', monospace; font-size: 11px; padding: 7px 10px; border-radius: 4px; cursor: pointer; outline: none; }
+  .count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 12px; }
+  .count strong { color: var(--text); }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; }
+  thead th:hover { color: var(--text); }
+  thead th .sort-icon { margin-left: 5px; opacity: 0.4; }
+  thead th.sorted .sort-icon { opacity: 1; color: var(--accent-laguna); }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.12s; }
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
+  tbody td { padding: 13px 14px; vertical-align: middle; }
+  .date-cell { font-family: 'DM Mono', monospace; font-size: 12px; white-space: nowrap; }
+  .track-pill { display: inline-block; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 3px; letter-spacing: 0.04em; white-space: nowrap; }
+  .track-Laguna { background: rgba(232,184,75,0.15); color: var(--accent-laguna); }
+  .track-Sonoma { background: rgba(91,163,245,0.15); color: var(--accent-sonoma); }
+  .track-Thunderhill { background: rgba(240,112,80,0.15); color: var(--accent-thunderhill); }
+  .event-name { font-size: 13px; font-weight: 400; color: var(--text); }
+  .event-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .type-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 3px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+  .type-Motorcycle { background: rgba(168,126,255,0.15); color: #a87eff; }
+  .type-Car { background: rgba(78,205,164,0.15); color: #4ecda4; }
+  .type-School { background: rgba(255,159,85,0.15); color: #ff9f55; }
+  .price-cell { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text); white-space: nowrap; }
+  .link-cell a { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.15s; letter-spacing: 0.04em; }
+  .link-cell a:hover { color: var(--text); border-bottom-color: var(--border); }
+  .empty-state { text-align: center; padding: 60px 20px; font-family: 'DM Mono', monospace; color: var(--muted); font-size: 12px; letter-spacing: 0.08em; }
+  @media (max-width: 768px) { .sort-bar { margin-left: 0; } td:nth-child(6), th:nth-child(6) { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="title-block">
+    <h1>CA TRACK DAYS <span>2026</span></h1>
+    <p>Laguna Seca · Sonoma Raceway · Thunderhill</p>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="dot" style="background:var(--accent-laguna)"></div>Laguna Seca</div>
+    <div class="legend-item"><div class="dot" style="background:var(--accent-sonoma)"></div>Sonoma Raceway</div>
+    <div class="legend-item"><div class="dot" style="background:var(--accent-thunderhill)"></div>Thunderhill</div>
+  </div>
+</header>
+<div class="controls">
+  <div class="filter-group" id="trackFilters">
+    <button class="filter-btn active" data-filter="all">All Tracks</button>
+    <button class="filter-btn" data-track="Laguna Seca">Laguna Seca</button>
+    <button class="filter-btn" data-track="Sonoma Raceway">Sonoma</button>
+    <button class="filter-btn" data-track="Thunderhill">Thunderhill</button>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="filter-group" id="typeFilters">
+    <button class="filter-btn" data-type="Motorcycle">Moto</button>
+    <button class="filter-btn" data-type="Car / HPDE">Car/HPDE</button>
+    <button class="filter-btn" data-type="School">School</button>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="filter-group" id="dayFilters">
+    <button class="filter-btn" data-day="Weekday">Weekdays</button>
+    <button class="filter-btn" data-day="Weekend">Weekends</button>
+  </div>
+  <div class="sort-bar">
+    <span class="sort-label">Sort</span>
+    <select id="sortSelect">
+      <option value="date">Date</option>
+      <option value="track">Track</option>
+      <option value="organizer">Organizer</option>
+    </select>
+  </div>
+</div>
+<div class="count" id="countLabel"></div>
+<table>
+  <thead>
+    <tr>
+      <th data-col="date">Date <span class="sort-icon">↕</span></th>
+      <th data-col="track">Track <span class="sort-icon">↕</span></th>
+      <th data-col="event">Event / Organizer</th>
+      <th data-col="type">Type <span class="sort-icon">↕</span></th>
+      <th data-col="price">Price</th>
+      <th>Register</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+<script>
+// Sources verified March 2026:
+// superbikeschool.com/schedule, ridelikeachampion.com, keigwins.com,
+// funtrackdayz.com/2026, cartersatthetrack.com, pacifictracktime.com,
+// hookedondriving.com/track-days-schedule/california/,
+// motorsportreg.com/orgs/speedsf, nasanorcal.com,
+// weathertechraceway.com, volantvivere.com
+const events = [
+  // ══ LAGUNA SECA ══
+  // Schools
+  { date:"2026-04-09", end:"2026-04-10", track:"Laguna Seca", event:"CA Superbike School — 2-Day Camp (All Levels)", organizer:"CA Superbike School", type:"School", price:"$3,695–3,995", url:"https://superbikeschool.com/sign-up/" },
+  { date:"2026-09-09", end:"2026-09-10", track:"Laguna Seca", event:"CA Superbike School — 2-Day Camp (All Levels)", organizer:"CA Superbike School", type:"School", price:"$3,695–3,995", url:"https://superbikeschool.com/sign-up/" },
+  { date:"2026-09-21", track:"Laguna Seca", event:"Carters@theTrack — Moto School / Track Day", organizer:"Carters@theTrack", type:"School", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  // Car HPDE
+  { date:"2026-02-28", end:"2026-03-01", track:"Laguna Seca", event:"Laguna Seca Kickoff! (92dB)", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-03-14", end:"2026-03-15", track:"Laguna Seca", event:"Speed SF — 92dB HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/speed-sf-92db-laguna-seca-3-14-15-weathertech-raceway-speedsf-com-437545" },
+  { date:"2026-03-28", end:"2026-03-29", track:"Laguna Seca", event:"Laguna Seca (103dB)", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-04-04", end:"2026-04-05", track:"Laguna Seca", event:"NCRC × SpeedSF — 103dB HPDE", organizer:"SpeedSF / NCRC", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/ncrc-x-speed-sf-103db-laguna-seca-3-14-15-weathertech-raceway-speedsf-com-838527" },
+  { date:"2026-05-16", end:"2026-05-17", track:"Laguna Seca", event:"Laguna Seca Summer Adventure (92dB)", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-08-12", end:"2026-08-15", track:"Laguna Seca", event:"Rolex Monterey Motorsports Reunion", organizer:"WeatherTech Raceway", type:"Car / HPDE", price:"From $60", url:"https://weathertechraceway.com/pages/season-events" },
+  { date:"2026-09-04", end:"2026-09-06", track:"Laguna Seca", event:"INDYCAR Grand Prix of Monterey", organizer:"INDYCAR", type:"Car / HPDE", price:"From $55", url:"https://weathertechraceway.com/pages/season-events" },
+  { date:"2026-10-10", end:"2026-10-11", track:"Laguna Seca", event:"Laguna Seca Fall (92dB)", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-11-14", end:"2026-11-15", track:"Laguna Seca", event:"NCRC × SpeedSF — 105dB HPDE", organizer:"SpeedSF / NCRC", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/ncrc-x-speed-sf-105db-laguna-seca-11-14-15-weathertech-raceway-speedsf-com-262861" },
+  { date:"2026-11-21", end:"2026-11-22", track:"Laguna Seca", event:"Laguna Seca (Fall)", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-12-19", end:"2026-12-20", track:"Laguna Seca", event:"Speed SF — 92dB HPDE (Year Closer)", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/speed-sf-92db-laguna-seca-12-19-20-weathertech-raceway-speedsf-com-817131" },
+  // Motorcycle
+  { date:"2026-05-23", track:"Laguna Seca", event:"Fun Track Dayz — Motorcycle Track Day (105dB)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$600", url:"https://www.funtrackdayz.com/2026/p/may-23" },
+  { date:"2026-05-24", track:"Laguna Seca", event:"Fun Track Dayz — Motorcycle Track Day (105dB)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$600", url:"https://www.funtrackdayz.com/2026/p/may-24-laguna" },
+  { date:"2026-06-01", track:"Laguna Seca", event:"Carters@theTrack — Motorcycle Track Day", organizer:"Carters@theTrack", type:"Motorcycle", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  { date:"2026-06-06", end:"2026-06-07", track:"Laguna Seca", event:"Pacific Track Time — Motorcycle Track Day (105dB)", organizer:"Pacific Track Time", type:"Motorcycle", price:"From $599", url:"https://www.pacifictracktime.com/products/weathertech-laguna-seca-105db-june-6-7" },
+  { date:"2026-07-05", track:"Laguna Seca", event:"Volant Vivere — Exclusive Moto Track Day (105dB)", organizer:"Volant Vivere", type:"Motorcycle", price:"TBD", url:"https://www.volantvivere.com/buy-events/p/july-5th-laguna-seca" },
+  { date:"2026-07-10", end:"2026-07-12", track:"Laguna Seca", event:"MotoAmerica Superbike Speedfest", organizer:"MotoAmerica", type:"Motorcycle", price:"From $40", url:"https://www.motoamerica.com/" },
+  // ══ SONOMA RACEWAY ══
+  // Schools
+  { date:"2026-06-08", end:"2026-06-09", track:"Sonoma Raceway", event:"CA Superbike School — 2-Day Camp (All Levels)", organizer:"CA Superbike School", type:"School", price:"$2,895–3,395", url:"https://superbikeschool.com/sign-up/" },
+  { date:"2026-09-28", end:"2026-09-29", track:"Sonoma Raceway", event:"CA Superbike School — 2-Day Camp (All Levels)", organizer:"CA Superbike School", type:"School", price:"$2,895–3,395", url:"https://superbikeschool.com/sign-up/" },
+  // Car HPDE
+  { date:"2026-02-28", end:"2026-03-01", track:"Sonoma Raceway", event:"Speed SF — Full Track HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"$350/day", url:"https://www.motorsportreg.com/events/speed-sf-sonoma-raceway-full-track-02-28-3-1-speedsf-com-588447" },
+  { date:"2026-03-06", end:"2026-03-07", track:"Sonoma Raceway", event:"TrackMasters — HPDE & Race Testing", organizer:"TrackMasters Racing", type:"Car / HPDE", price:"TBD", url:"https://www.trackmasters-racing.com/" },
+  { date:"2026-03-07", end:"2026-03-08", track:"Sonoma Raceway", event:"NASA NorCal — HPDE, Time Trial & Sprint", organizer:"NASA NorCal", type:"Car / HPDE", price:"TBD", url:"https://members.drivenasa.com/events?region_id=2" },
+  { date:"2026-03-16", track:"Sonoma Raceway", event:"Open Track Day", organizer:"Sonoma Raceway", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/open-track-day-march-16-2026-sonoma-raceway-465570" },
+  { date:"2026-03-19", track:"Sonoma Raceway", event:"Sonoma Kickoff! — HPDE", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-03-31", track:"Sonoma Raceway", event:"Open Track Day", organizer:"Sonoma Raceway", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/open-track-day-march-31-2026-sonoma-raceway-113942" },
+  { date:"2026-04-04", end:"2026-04-05", track:"Sonoma Raceway", event:"LightSpeed Track Events — HPDE", organizer:"LightSpeed Track Events", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/4-5-sonoma-raceway-lightspeed-track-events-876761" },
+  { date:"2026-04-04", end:"2026-04-05", track:"Sonoma Raceway", event:"Serge Track Days — HPDE", organizer:"Serge Track Days", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/serge-track-days-sonoma-raceway-hpde-604469" },
+  { date:"2026-04-06", track:"Sonoma Raceway", event:"Golden Gate Lotus Club — HPDE", organizer:"Golden Gate Lotus Club", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/sonoma-raceway-hpde-april-6-2026-golden-gate-lotus-club-230048" },
+  { date:"2026-04-07", track:"Sonoma Raceway", event:"Open Track Day", organizer:"Sonoma Raceway", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/open-track-day-april-7-2026-sonoma-raceway-468873" },
+  { date:"2026-05-08", end:"2026-05-10", track:"Sonoma Raceway", event:"Speed SF — Full Track HPDE (3-day)", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/speed-sf-sonoma-raceway-full-track-5-8-10-speedsf-com-469605" },
+  { date:"2026-05-23", end:"2026-05-24", track:"Sonoma Raceway", event:"NASA NorCal — HPDE, Time Trial & Sprint", organizer:"NASA NorCal", type:"Car / HPDE", price:"TBD", url:"https://members.drivenasa.com/events?region_id=2" },
+  { date:"2026-06-06", end:"2026-06-07", track:"Sonoma Raceway", event:"Speed SF — Full Track HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.motorsportreg.com/events/speed-sf-sonoma-raceway-full-track-6-7-speedsf-com-818349" },
+  { date:"2026-06-12", track:"Sonoma Raceway", event:"Sonoma Summer HPDE", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-07-02", track:"Sonoma Raceway", event:"Sonoma HPDE", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-07-11", end:"2026-07-12", track:"Sonoma Raceway", event:"NASA NorCal — HPDE, Time Trial & Sprint", organizer:"NASA NorCal", type:"Car / HPDE", price:"TBD", url:"https://members.drivenasa.com/events?region_id=2" },
+  { date:"2026-08-22", end:"2026-08-23", track:"Sonoma Raceway", event:"Sonoma Summer Closer", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-10-17", end:"2026-10-18", track:"Sonoma Raceway", event:"Sonoma Fall Classic", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-11-07", end:"2026-11-08", track:"Sonoma Raceway", event:"NASA NorCal — HPDE, Time Trial & Sprint", organizer:"NASA NorCal", type:"Car / HPDE", price:"TBD", url:"https://members.drivenasa.com/events?region_id=2" },
+  // Motorcycle
+  { date:"2026-03-30", track:"Sonoma Raceway", event:"Carters@theTrack — Motorcycle Track Day", organizer:"Carters@theTrack", type:"Motorcycle", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  { date:"2026-04-20", track:"Sonoma Raceway", event:"Fun Track Dayz — Motorcycle Track Day", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$340–380", url:"https://www.funtrackdayz.com/2026/p/apr-20" },
+  { date:"2026-08-31", track:"Sonoma Raceway", event:"Carters@theTrack — Motorcycle Track Day", organizer:"Carters@theTrack", type:"Motorcycle", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  // ══ THUNDERHILL ══
+  // Schools
+  { date:"2026-06-06", end:"2026-06-07", track:"Thunderhill", event:"CA Superbike School — Single Day Schools (All Levels)", organizer:"CA Superbike School", type:"School", price:"$675–875/day", url:"https://superbikeschool.com/sign-up/" },
+  { date:"2026-06-10", end:"2026-06-11", track:"Thunderhill", event:"Yamaha Champions Riding School — 2-Day ChampSchool", organizer:"Yamaha ChampSchool", type:"School", price:"TBD", url:"https://ridelikeachampion.com/schedule/" },
+  { date:"2026-09-26", end:"2026-09-27", track:"Thunderhill", event:"CA Superbike School — Single Day Schools (All Levels)", organizer:"CA Superbike School", type:"School", price:"$675–875/day", url:"https://superbikeschool.com/sign-up/" },
+  { date:"2026-09-14", end:"2026-09-15", track:"Thunderhill", event:"Carters@theTrack — AFM Race Weekend + Novice School", organizer:"Carters@theTrack", type:"School", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  // Note: Keigwins@theTrack also runs schools and track days at Thunderhill — schedule is JS-rendered, check keigwins.com directly
+  // Motorcycle
+  { date:"2026-02-28", track:"Thunderhill", event:"Fun Track Dayz — Thunderhill East (Moto)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$245", url:"https://www.funtrackdayz.com/2026/p/feb-28" },
+  { date:"2026-03-01", track:"Thunderhill", event:"Fun Track Dayz — Thunderhill East (Moto)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$245", url:"https://www.funtrackdayz.com/2026/p/mar-1" },
+  { date:"2026-03-14", end:"2026-03-15", track:"Thunderhill", event:"Pacific Track Time — Thunderhill East (Moto)", organizer:"Pacific Track Time", type:"Motorcycle", price:"From $239", url:"https://www.pacifictracktime.com/products/thunderhill-raceway-park-east-march-14-15" },
+  { date:"2026-03-23", track:"Thunderhill", event:"Fun Track Dayz — Thunderhill East (Moto)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$225", url:"https://www.funtrackdayz.com/2026/p/mar-23" },
+  { date:"2026-04-13", track:"Thunderhill", event:"Fun Track Dayz — Thunderhill West (Moto)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$225", url:"https://www.funtrackdayz.com/2026/p/apr-13" },
+  { date:"2026-04-18", end:"2026-04-19", track:"Thunderhill", event:"Carters@theTrack — Thunderhill East (incl. NRS)", organizer:"Carters@theTrack", type:"Motorcycle", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  { date:"2026-04-25", end:"2026-04-26", track:"Thunderhill", event:"Pacific Track Time — Thunderhill West (Moto)", organizer:"Pacific Track Time", type:"Motorcycle", price:"From $219", url:"https://www.pacifictracktime.com/products/thunderhill-raceway-park-west-april-25-26" },
+  { date:"2026-05-02", track:"Thunderhill", event:"Fun Track Dayz — Thunderhill West CCW (Moto)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$215", url:"https://www.funtrackdayz.com/2026/p/may-2" },
+  { date:"2026-05-03", track:"Thunderhill", event:"Fun Track Dayz — Thunderhill West CCW (Moto)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$215", url:"https://www.funtrackdayz.com/2026/p/may-3" },
+  { date:"2026-05-08", track:"Thunderhill", event:"Carters@theTrack — Thunderhill East (AFM Practice/NRS)", organizer:"Carters@theTrack", type:"Motorcycle", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  { date:"2026-05-16", end:"2026-05-17", track:"Thunderhill", event:"Pacific Track Time — Thunderhill West (Moto)", organizer:"Pacific Track Time", type:"Motorcycle", price:"From $219", url:"https://www.pacifictracktime.com/products/thunderhill-raceway-park-west-may-16-17" },
+  { date:"2026-05-18", track:"Thunderhill", event:"Volant Vivere — Thunderhill East Open (20-person)", organizer:"Volant Vivere", type:"Motorcycle", price:"TBD", url:"https://www.volantvivere.com/buy-events/p/may-waitlist" },
+  { date:"2026-06-12", track:"Thunderhill", event:"AFM/CRA Friday Practice — Thunderhill East (Moto)", organizer:"Fun Track Dayz / AFM", type:"Motorcycle", price:"From $175", url:"https://www.funtrackdayz.com/2026/p/jun-12" },
+  { date:"2026-06-20", end:"2026-06-21", track:"Thunderhill", event:"Pacific Track Time — Thunderhill West (Moto)", organizer:"Pacific Track Time", type:"Motorcycle", price:"From $219", url:"https://www.pacifictracktime.com/products/thunderhill-raceway-park-west-june-20-21" },
+  { date:"2026-07-18", end:"2026-07-19", track:"Thunderhill", event:"Carters@theTrack — Thunderhill West (Moto)", organizer:"Carters@theTrack", type:"Motorcycle", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  { date:"2026-07-25", end:"2026-07-26", track:"Thunderhill", event:"Pacific Track Time — Thunderhill West (Moto)", organizer:"Pacific Track Time", type:"Motorcycle", price:"From $219", url:"https://www.pacifictracktime.com/products/thunderhill-raceway-park-west-july-25-26" },
+  { date:"2026-08-15", end:"2026-08-16", track:"Thunderhill", event:"Pacific Track Time — Thunderhill West (Moto)", organizer:"Pacific Track Time", type:"Motorcycle", price:"From $219", url:"https://www.pacifictracktime.com/products/thunderhill-raceway-park-west-august-15-16" },
+  { date:"2026-08-22", end:"2026-08-23", track:"Thunderhill", event:"Carters@theTrack — Thunderhill West (Moto)", organizer:"Carters@theTrack", type:"Motorcycle", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  { date:"2026-09-12", end:"2026-09-13", track:"Thunderhill", event:"Pacific Track Time — Thunderhill East (Moto)", organizer:"Pacific Track Time", type:"Motorcycle", price:"From $269", url:"https://www.pacifictracktime.com/products/thunderhill-raceway-park-east-september-12-13" },
+  { date:"2026-09-19", track:"Thunderhill", event:"Fun Track Dayz — Thunderhill West CCW (Moto)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$215", url:"https://www.funtrackdayz.com/2026/p/sept-19" },
+  { date:"2026-09-20", track:"Thunderhill", event:"Fun Track Dayz — Thunderhill West CCW (Moto)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$215", url:"https://www.funtrackdayz.com/2026/p/sept-20" },
+  { date:"2026-09-24", track:"Thunderhill", event:"Volant Vivere — Thunderhill East Open (20-person)", organizer:"Volant Vivere", type:"Motorcycle", price:"TBD", url:"https://www.volantvivere.com/buy-events/p/september-24th-thunderhill-east" },
+  { date:"2026-09-25", track:"Thunderhill", event:"Carters@theTrack — Thunderhill East (AFM Practice/NRS)", organizer:"Carters@theTrack", type:"Motorcycle", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  { date:"2026-10-03", track:"Thunderhill", event:"Fun Track Dayz — Thunderhill West CW (Moto)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$215", url:"https://www.funtrackdayz.com/2026/p/oct-3" },
+  { date:"2026-10-04", track:"Thunderhill", event:"Fun Track Dayz — Thunderhill West CW (Moto)", organizer:"Fun Track Dayz", type:"Motorcycle", price:"$215", url:"https://www.funtrackdayz.com/2026/p/oct-4" },
+  { date:"2026-10-10", end:"2026-10-11", track:"Thunderhill", event:"Carters@theTrack — Thunderhill East (Moto)", organizer:"Carters@theTrack", type:"Motorcycle", price:"TBD", url:"https://www.cartersatthetrack.com/" },
+  // Car HPDE
+  { date:"2026-04-04", end:"2026-04-05", track:"Thunderhill", event:"Speed SF — Thunderhill West HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"From $175", url:"https://www.motorsportreg.com/events/speed-sf-thunderhill-west-4-04-05-raceway-park-speedsf-com-232617" },
+  { date:"2026-04-10", track:"Thunderhill", event:"Speed SF — Thunderhill Open Test Day", organizer:"SpeedSF", type:"Car / HPDE", price:"From $175", url:"https://www.motorsportreg.com/events/speed-sf-thunderhill-open-test-day-4-10-raceway-park-speedsf-com-782588" },
+  { date:"2026-04-11", end:"2026-04-12", track:"Thunderhill", event:"NASA NorCal — HPDE, Time Trial & Sprint", organizer:"NASA NorCal", type:"Car / HPDE", price:"TBD", url:"https://members.drivenasa.com/events?region_id=2" },
+  { date:"2026-04-18", end:"2026-04-19", track:"Thunderhill", event:"Training Day — Thunderhill 2 Mile (HPDE)", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-06-06", end:"2026-06-07", track:"Thunderhill", event:"Speed SF — Thunderhill East HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"From $175", url:"https://www.motorsportreg.com/events/speed-sf-thunderhill-east-06-07-raceway-park-speedsf-com-781315" },
+  { date:"2026-06-20", end:"2026-06-21", track:"Thunderhill", event:"Thunderhill HPDE", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-09-10", track:"Thunderhill", event:"Thunderhill HPDE", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-09-19", track:"Thunderhill", event:"NASA NorCal — 12 Hrs of Thunderhill (TREC Endurance)", organizer:"NASA NorCal", type:"Car / HPDE", price:"$1,995/team", url:"https://members.drivenasa.com/events?region_id=2" },
+  { date:"2026-11-07", end:"2026-11-08", track:"Thunderhill", event:"Thunderhill HPDE (Fall)", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+  { date:"2026-12-12", end:"2026-12-13", track:"Thunderhill", event:"Thunderhill HPDE (Year Closer)", organizer:"Hooked On Driving", type:"Car / HPDE", price:"TBD", url:"https://www.hookedondriving.com/track-days-schedule/california/" },
+];
+const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function parseDate(str) { return new Date(str + "T12:00:00"); }
+function formatDate(str, endStr) {
+  const d = parseDate(str);
+  const m = months[d.getMonth()], day = d.getDate(), dow = days[d.getDay()];
+  if (endStr) {
+    const e = parseDate(endStr);
+    if (e.getMonth() !== d.getMonth()) return `${m} ${day}–${months[e.getMonth()]} ${e.getDate()}`;
+    return `${m} ${day}–${e.getDate()}`;
+  }
+  return `${m} ${day} · ${dow}`;
+}
+let activeTrack = null, activeType = null, activeDay = null, sortCol = "date", sortDir = 1;
+function getTrackClass(t) { return t==="Laguna Seca"?"track-Laguna":t==="Sonoma Raceway"?"track-Sonoma":"track-Thunderhill"; }
+function getTypeClass(t) { return t==="Motorcycle"?"type-Motorcycle":t==="Car / HPDE"?"type-Car":"type-School"; }
+function render() {
+  let data = [...events];
+  if (activeTrack) data = data.filter(e => e.track === activeTrack);
+  if (activeType)  data = data.filter(e => e.type === activeType);
+  if (activeDay) {
+    data = data.filter(e => {
+      const dow = parseDate(e.date).getDay(), isWeekend = dow===0||dow===6;
+      return activeDay==="Weekend" ? isWeekend : !isWeekend;
+    });
+  }
+  data.sort((a,b) => {
+    const av = sortCol==="date"?a.date:sortCol==="track"?a.track:a.organizer;
+    const bv = sortCol==="date"?b.date:sortCol==="track"?b.track:b.organizer;
+    return av<bv?-sortDir:av>bv?sortDir:0;
+  });
+  document.getElementById("countLabel").innerHTML = `<strong>${data.length}</strong> event${data.length!==1?"s":""} shown`;
+  const tbody = document.getElementById("tableBody");
+  if (!data.length) { tbody.innerHTML=`<tr><td colspan="6" class="empty-state">No events match your filters.</td></tr>`; return; }
+  tbody.innerHTML = data.map(e=>`
+    <tr>
+      <td class="date-cell">${formatDate(e.date,e.end)}</td>
+      <td><span class="track-pill ${getTrackClass(e.track)}">${e.track}</span></td>
+      <td><div class="event-name">${e.event}</div><div class="event-sub">${e.organizer}</div></td>
+      <td><span class="type-badge ${getTypeClass(e.type)}">${e.type}</span></td>
+      <td class="price-cell">${e.price}</td>
+      <td class="link-cell"><a href="${e.url}" target="_blank">Register →</a></td>
+    </tr>`).join("");
+}
+document.getElementById("trackFilters").addEventListener("click", e => {
+  const btn = e.target.closest("button"); if (!btn) return;
+  document.querySelectorAll("#trackFilters .filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active"); activeTrack = btn.dataset.track||null; render();
+});
+document.getElementById("typeFilters").addEventListener("click", e => {
+  const btn = e.target.closest("button"); if (!btn) return;
+  const was = btn.classList.contains("active");
+  document.querySelectorAll("#typeFilters .filter-btn").forEach(b=>b.classList.remove("active"));
+  if (!was){btn.classList.add("active");activeType=btn.dataset.type;}else{activeType=null;} render();
+});
+document.getElementById("dayFilters").addEventListener("click", e => {
+  const btn = e.target.closest("button"); if (!btn) return;
+  const was = btn.classList.contains("active");
+  document.querySelectorAll("#dayFilters .filter-btn").forEach(b=>b.classList.remove("active"));
+  if (!was){btn.classList.add("active");activeDay=btn.dataset.day;}else{activeDay=null;} render();
+});
+document.getElementById("sortSelect").addEventListener("change", e=>{sortCol=e.target.value;render();});
+document.querySelectorAll("thead th[data-col]").forEach(th=>{
+  th.addEventListener("click",()=>{
+    const col=th.dataset.col;
+    if(sortCol===col){sortDir*=-1;}else{sortCol=col;sortDir=1;}
+    document.getElementById("sortSelect").value=col;
+    document.querySelectorAll("thead th").forEach(h=>h.classList.remove("sorted"));
+    th.classList.add("sorted");
+    th.querySelector(".sort-icon").textContent=sortDir===1?"↑":"↓";
+    render();
+  });
+});
+render();
+</script>
+</body>
+</html>
