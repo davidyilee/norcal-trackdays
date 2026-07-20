@@ -36,4 +36,13 @@ plus corrections to existing entries (prices that were TBD, cancelled/moved even
   - Removed: Keigwins placeholder note (zero 2026 events; Carters is the
     successor operation — noted in sources comment).
   - Validated with Node: all dates/tracks/types/URLs well-formed; page renders.
-- 2026-07-19: Committed and pushed to Main for GitHub Pages deploy.
+- 2026-07-19: Data refresh committed and pushed to Main (f7e66ae).
+- 2026-07-19: Found why the site was stale: `.github/workflows/static.yml`
+  triggers on pushes to `claude/add-claude-documentation-BZIAN` (leftover from
+  repo setup), so pushes to Main never deployed. Fix committed (trigger → Main)
+  but the push was rejected — the local git/gh token lacks the `workflow` scope,
+  which is required to modify workflow files (and to dispatch runs or change
+  Pages settings via API). To deploy: either `gh auth refresh -h github.com -s workflow`
+  then `git push`, or click "Run workflow" (branch: Main) on the
+  "Deploy static content to Pages" action in the GitHub UI. Once the trigger
+  fix lands, future pushes to Main deploy automatically.
