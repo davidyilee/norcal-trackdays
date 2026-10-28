@@ -77,6 +77,7 @@
   <div class="title-block">
     <h1>CA TRACK DAYS <span>2027</span></h1>
     <p>Laguna Seca · Sonoma Raceway · Thunderhill</p>
+    <p><a href="index.html" style="color:inherit;">← 2026 Schedule</a></p>
   </div>
   <div class="legend">
     <div class="legend-item"><div class="dot" style="background:var(--accent-laguna)"></div>Laguna Seca</div>
@@ -127,7 +128,7 @@
 </table>
 <script>
 // 2027 sources — to be verified as 2027 schedules are announced:
-// Checked Oct 4, 2026: only the Pre-Reunion (Aug 7-8) is confirmed; other orgs have yet to publish 2027 schedules.
+// Checked Oct 28, 2026: SpeedSF (preliminary — dates subject to change), NASA NorCal, and MotoAmerica Speedfest verified and added below; CSS 2027 still unpublished (expected mid-Nov); other orgs' 2027 schedules not yet found.
 // superbikeschool.com/schedule, ridelikeachampion.com, cartersatthetrack.com,
 // funtrackdayz.com, pacifictracktime.com, z2trackdays.com, volantvivere.com,
 // hookedondriving.motorsportreg.com, motorsportreg.com/orgs/speedsf,
@@ -139,9 +140,31 @@
 // The `end` field is optional (omit for single-day events).
 const events = [
   // ══ LAGUNA SECA ══
+  { date:"2027-03-06", end:"2027-03-07", track:"Laguna Seca", event:"NCRC × SpeedSF — HPDE", organizer:"SpeedSF / NCRC", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-03-20", end:"2027-03-21", track:"Laguna Seca", event:"Speed SF — HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-05-22", end:"2027-05-23", track:"Laguna Seca", event:"Speed SF — HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-07-09", end:"2027-07-11", track:"Laguna Seca", event:"MotoAmerica Speedfest at Monterey", organizer:"MotoAmerica", type:"Motorcycle", price:"TBD", url:"https://www.motoamerica.com/2027-motoamerica-ticket-sales-announced-for-three-iconic-venues/" },
   { date:"2027-08-07", end:"2027-08-08", track:"Laguna Seca", event:"Monterey Pre-Reunion & Corkscrew Hillclimb", organizer:"WeatherTech Raceway", type:"Car / HPDE", price:"TBD", url:"https://whatsupmonterey.com/events/monterey-car-week/monterey-pre-reunion/618" },
-  // 2027 Sonoma Raceway events go here.
-  // 2027 Thunderhill events go here.
+  // ══ SONOMA RACEWAY ══
+  { date:"2027-01-23", end:"2027-01-24", track:"Sonoma Raceway", event:"Speed SF — HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-02-27", end:"2027-02-28", track:"Sonoma Raceway", event:"Speed SF — HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-03-13", end:"2027-03-14", track:"Sonoma Raceway", event:"NASA NorCal — HPDE, Time Trial & Sprint", organizer:"NASA NorCal", type:"Car / HPDE", price:"TBD", url:"https://members.drivenasa.com/regions/2" },
+  { date:"2027-05-07", end:"2027-05-09", track:"Sonoma Raceway", event:"Speed SF — HPDE (3-Day)", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-05-29", end:"2027-05-30", track:"Sonoma Raceway", event:"NASA NorCal — HPDE, Time Trial & Sprint", organizer:"NASA NorCal", type:"Car / HPDE", price:"TBD", url:"https://members.drivenasa.com/regions/2" },
+  { date:"2027-06-25", end:"2027-06-27", track:"Sonoma Raceway", event:"Speed SF — HPDE (3-Day)", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-07-16", end:"2027-07-18", track:"Sonoma Raceway", event:"NASA NorCal — HPDE, Time Trial & Sprint (X-Over SoCal)", organizer:"NASA NorCal", type:"Car / HPDE", price:"TBD", url:"https://members.drivenasa.com/regions/2" },
+  { date:"2027-09-17", end:"2027-09-19", track:"Sonoma Raceway", event:"Speed SF — HPDE (3-Day)", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-11-06", end:"2027-11-07", track:"Sonoma Raceway", event:"NASA NorCal — HPDE, Time Trial & Sprint (Double Points)", organizer:"NASA NorCal", type:"Car / HPDE", price:"TBD", url:"https://members.drivenasa.com/regions/2" },
+  { date:"2027-11-27", end:"2027-11-28", track:"Sonoma Raceway", event:"Speed SF — HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  // ══ THUNDERHILL ══
+  { date:"2027-01-09", end:"2027-01-10", track:"Thunderhill", event:"Speed SF — Thunderhill East HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-02-20", end:"2027-02-21", track:"Thunderhill", event:"Speed SF — Thunderhill East HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-04-10", end:"2027-04-11", track:"Thunderhill", event:"Speed SF — Thunderhill West HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-05-08", end:"2027-05-09", track:"Thunderhill", event:"NASA NorCal — HPDE, Time Trial & Sprint", organizer:"NASA NorCal", type:"Car / HPDE", price:"TBD", url:"https://members.drivenasa.com/regions/2" },
+  { date:"2027-06-05", end:"2027-06-06", track:"Thunderhill", event:"Speed SF — Thunderhill East HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-09-04", end:"2027-09-06", track:"Thunderhill", event:"Speed SF — Thunderhill East HPDE (3-Day)", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-10-23", end:"2027-10-24", track:"Thunderhill", event:"Speed SF — Thunderhill West HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
+  { date:"2027-12-04", end:"2027-12-05", track:"Thunderhill", event:"Speed SF — Thunderhill East HPDE", organizer:"SpeedSF", type:"Car / HPDE", price:"TBD", url:"https://www.speedsf.com/events2026" },
 ];
 const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
